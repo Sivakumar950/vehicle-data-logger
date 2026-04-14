@@ -10,7 +10,7 @@ env:
   AWS_REGION: us-east-1
   ECS_CLUSTER: vehicle-data-logger
   ECS_SERVICE: vehicle-data-tasks-service-9mv1xveq
-
+  DESIRED_TASKS: 1 # Change this to increase/decrease running containers
 jobs:
   build-push-deploy:
     runs-on: ubuntu-latest
@@ -54,5 +54,5 @@ jobs:
 
       - name: Force New Deployment in ECS
         run: |
-          echo "Updating ECS Service to pull new latest images..."
-          aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --force-new-deployment
+          echo "Updating ECS Service to pull new latest images and setting desired tasks to ${{ env.DESIRED_TASKS }}..."
+          aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --desired-count ${{ env.DESIRED_TASKS }} --force-new-deployment
