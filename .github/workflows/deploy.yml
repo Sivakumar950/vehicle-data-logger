@@ -10,7 +10,7 @@ env:
   AWS_REGION: us-east-1
   ECS_CLUSTER: vehicle-data-logger
   ECS_SERVICE: vehicle-data-tasks-service-9mv1xveq
-  DESIRED_TASKS: 1 # Change this to increase/decrease running containers
+  DESIRED_TASKS: 1
 jobs:
   build-push-deploy:
     runs-on: ubuntu-latest
