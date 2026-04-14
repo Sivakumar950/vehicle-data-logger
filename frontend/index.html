@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VehicleManager - Login</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta name="description" content="Vehicle logging details powered by Supabase.">
+</head>
+<body>
+    <div class="login-split">
+        <div class="login-left">
+            <div class="glass-panel login-box">
+                <h1>VehicleManager</h1>
+                <p class="login-subtitle">Your beautiful and modern companion to log refuelings, service notes, and comprehensive vehicle details seamlessly.</p>
+                <button id="loginBtn" class="google-btn">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google Logo" class="google-icon">
+                    Sign in with Google
+                </button>
+            </div>
+        </div>
+        <div class="login-right"></div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const btn = document.getElementById('loginBtn');
+            await Auth.requireNoAuth();
+            
+            btn.addEventListener('click', async () => {
+                btn.innerHTML = '<div class="loader" style="width:16px;height:16px;margin:0;border-width:2px;display:inline-block;"></div><span style="color:#111">Signing in...</span>';
+                await Auth.signIn();
+            });
+        });
+    </script>
+</body>
+</html>

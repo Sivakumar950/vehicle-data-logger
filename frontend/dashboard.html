@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VehicleManager - Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <header>
+        <div class="brand">VehicleManager</div>
+        <div class="nav-actions">
+            <button id="addVehicleBtn" class="btn">+ Add Vehicle</button>
+            <button id="logoutBtn" class="btn btn-outline">Logout</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2>Your Garage</h2>
+        <div id="vehiclesGrid" class="grid">
+            <div class="loader" style="grid-column: 1/-1"></div>
+        </div>
+    </div>
+
+    <div id="addVehicleModal" class="modal-overlay">
+        <div class="glass-panel modal-content">
+            <div class="modal-header">
+                <h3>Add New Vehicle</h3>
+                <button class="modal-close" id="closeVehicleModal">&times;</button>
+            </div>
+            <form id="addVehicleForm">
+                <div class="form-group">
+                    <label>Make</label>
+                    <input type="text" id="vehicleMake" required placeholder="e.g. Toyota">
+                </div>
+                <div class="form-group">
+                    <label>Model</label>
+                    <input type="text" id="vehicleModel" required placeholder="e.g. RAV4">
+                </div>
+                <div class="form-group">
+                    <label>Year</label>
+                    <input type="number" id="vehicleYear" required min="1900" max="2100" placeholder="e.g. 2022">
+                </div>
+                <div class="form-group">
+                    <label>License Plate (Optional)</label>
+                    <input type="text" id="vehiclePlate" placeholder="e.g. ABC 1234">
+                </div>
+                <button type="submit" class="btn" style="width: 100%">Save Vehicle</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

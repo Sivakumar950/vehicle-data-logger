@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Details - VehicleManager</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <header>
+        <div class="brand">VehicleManager</div>
+        <div class="nav-actions">
+            <a href="dashboard.html" class="btn btn-outline">&larr; Back to Garage</a>
+            <button id="logoutBtn" class="btn btn-outline">Logout</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="glass-panel" style="margin-bottom: 20px;">
+            <div class="flex-between">
+                <div>
+                    <h2 id="vehicleTitle">Loading Vehicle...</h2>
+                    <p class="text-muted" id="vehicleSub" style="margin-top: 5px;">...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="refueling">Refueling Logs</div>
+            <div class="tab" data-tab="oil">Oil Changes</div>
+            <div class="tab" data-tab="notes">Service Notes</div>
+        </div>
+
+        <div id="refueling" class="tab-content active">
+            <div class="flex-between" style="margin-bottom: 16px;">
+                <h3>Refueling History</h3>
+                <button class="btn" id="openRefuelModal">Add Refuel</button>
+            </div>
+            <div class="table-wrapper">
+                <table id="refuelingTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Odometer</th>
+                            <th>Fuel</th>
+                            <th>Quantity</th>
+                            <th>Cost</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="oil" class="tab-content">
+            <div class="flex-between" style="margin-bottom: 16px;">
+                <h3>Oil Change History</h3>
+                <button class="btn" id="openOilModal">Add Oil Change</button>
+            </div>
+            <div class="table-wrapper">
+                <table id="oilTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Odometer</th>
+                            <th>Oil Type</th>
+                            <th>Cost</th>
+                            <th>Next Due</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="notes" class="tab-content">
+            <div class="flex-between" style="margin-bottom: 16px;">
+                <h3>Service Notes</h3>
+                <button class="btn" id="openNoteModal">Add Note</button>
+            </div>
+            <div id="notesGrid" class="grid"></div>
+        </div>
+    </div>
+
+    <div id="refuelModal" class="modal-overlay">
+        <div class="glass-panel modal-content">
+            <div class="modal-header">
+                <h3>Log Refueling</h3>
+                <button class="modal-close" data-modal="refuelModal">&times;</button>
+            </div>
+            <form id="refuelForm">
+                <div class="form-group"><label>Date</label><input type="date" id="rfDate"></div>
+                <div class="form-group"><label>Odometer</label><input type="number" id="rfOdometer" required></div>
+                <div class="form-group"><label>Fuel Type</label><select id="rfFuelType"><option value="petrol">Petrol</option><option value="diesel">Diesel</option><option value="ev">EV / Electricity</option></select></div>
+                <div class="form-group"><label>Quantity (Liters/Gallons/kWh)</label><input type="number" step="0.01" id="rfQuantity" required></div>
+                <div class="form-group"><label>Total Cost</label><input type="number" step="0.01" id="rfCost" required></div>
+                <div class="form-group"><label>Notes</label><input type="text" id="rfNotes"></div>
+                <button type="submit" class="btn" style="width: 100%">Save Log</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="oilModal" class="modal-overlay">
+        <div class="glass-panel modal-content">
+            <div class="modal-header">
+                <h3>Log Oil Change</h3>
+                <button class="modal-close" data-modal="oilModal">&times;</button>
+            </div>
+            <form id="oilForm">
+                <div class="form-group"><label>Date</label><input type="date" id="oilDate"></div>
+                <div class="form-group"><label>Odometer</label><input type="number" id="oilOdometer" required></div>
+                <div class="form-group"><label>Oil Type</label><input type="text" id="oilType" placeholder="e.g. 5W-30 Synthetic"></div>
+                <div class="form-group"><label>Cost</label><input type="number" step="0.01" id="oilCost"></div>
+                <div class="form-group"><label>Next Change Due (Odometer)</label><input type="number" id="oilNextDue"></div>
+                <div class="form-group"><label>Notes</label><input type="text" id="oilNotes"></div>
+                <button type="submit" class="btn" style="width: 100%">Save Oil Change</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="noteModal" class="modal-overlay">
+        <div class="glass-panel modal-content">
+            <div class="modal-header">
+                <h3>Add Service Note</h3>
+                <button class="modal-close" data-modal="noteModal">&times;</button>
+            </div>
+            <form id="noteForm">
+                <div class="form-group"><label>Date</label><input type="date" id="snDate"></div>
+                <div class="form-group"><label>Title</label><input type="text" id="snTitle" required placeholder="e.g. Brake Pad Replacement"></div>
+                <div class="form-group"><label>Odometer</label><input type="number" id="snOdometer"></div>
+                <div class="form-group"><label>Cost</label><input type="number" step="0.01" id="snCost"></div>
+                <div class="form-group"><label>Description</label><textarea id="snDetails" rows="4" required placeholder="What service was done?"></textarea></div>
+                <div class="form-group">
+                    <label>Upload Bill/Image</label>
+                    <input type="file" id="snImage" class="file-upload" accept="image/*">
+                </div>
+                <button type="submit" class="btn" style="width: 100%">Save Note</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/vehicle.js"></script>
+</body>
+</html>
